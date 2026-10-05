@@ -17,7 +17,7 @@ export function createBarRenderer(canvas) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function render(values) {
+  function render(values, highlights = new Map()) {
     const { width, height } = canvas.getBoundingClientRect();
     ctx.fillStyle = readCssColor('--color-canvas-bg');
     ctx.fillRect(0, 0, width, height);
@@ -25,9 +25,9 @@ export function createBarRenderer(canvas) {
     const max = Math.max(...values);
     const slot = width / values.length;
     const barWidth = slot * (1 - BAR_GAP_RATIO);
-    ctx.fillStyle = readCssColor('--color-bar');
 
     values.forEach((value, i) => {
+      ctx.fillStyle = readCssColor(highlights.get(i) ?? '--color-bar');  
       const barHeight = (value / max) * height;
       ctx.fillRect(i * slot, height - barHeight, barWidth, barHeight);
     });
